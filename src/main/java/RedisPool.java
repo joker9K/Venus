@@ -1,26 +1,30 @@
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * @author zhangwt
- * @date 2017/7/13 22:28.
+ * @date 2017/7/21 22:00.
  */
 public class RedisPool {
 
-    private static Jedis jedis;
+    private static JedisPool pool;
 
     static {
-        //连接redis服务器，192.168.0.100:6379
-        jedis = new Jedis("127.0.0.1", 6379);
-        //权限认证
-        jedis.auth("admin");
+        JedisPoolConfig config = new JedisPoolConfig();
+        config.setMaxActive(100);//jedis的最大分配对象
+        config.setMaxIdle(100);//jedis最大保存idel状态对象数
+        config.setMaxWait(1000);//jedis池没有对象返回时，最大等待时间
+        pool = new JedisPool(config,"127.0.0.1", 6379);
     }
 
-    public static Jedis getInstance(){
+    public static Jedis getJedis(){
+        Jedis jedis = pool.getResource();
+        jedis.auth("admin");
         return jedis;
     }
 
-    public static void main(String[] args) {
-        Jedis jedis = getInstance();
-        System.out.println(jedis.get("name"));
+    public static void recycleJedis(Jedis jedis){
+        pool.returnResource(jedis);
     }
 }
