@@ -19,6 +19,7 @@ public class RedisConcurrentTest {
             new Thread(() -> {
                 Jedis jedis = RedisPool.getJedis();
                 for (int j = 0; j < 1000; j++) {
+//                    jedis.incr("name");//原子操作是线程安全的
                     int p = Integer.valueOf(jedis.get("name"));
                     jedis.set("name",String.valueOf(p+1));
                 }
