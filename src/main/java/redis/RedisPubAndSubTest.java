@@ -1,3 +1,5 @@
+package redis;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
@@ -13,10 +15,12 @@ public class RedisPubAndSubTest {
         Jedis jedis2 = RedisPool.getJedis();
         MyListener listener = new MyListener();
         Publisher pub = new Publisher();
-        pub.publish(jedis2);
+        String channel = "channel";
+        String message = "hello world";
+        pub.publish(jedis2,channel,message);
 
         Subscriber sub = new Subscriber();
-        sub.psub(jedis1,listener);
+        sub.psub(jedis1,listener,channel);
     }
 }
 
@@ -62,7 +66,7 @@ class MyListener extends JedisPubSub{
 
 class Publisher {
 
-    public void publish(final Jedis redisClient) {
+    public void publish(final Jedis redisClient,final String channel,final String mesage) {
 
         new Thread(() -> {
             try {
@@ -70,24 +74,24 @@ class Publisher {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("发布：news.share");
-            redisClient.publish("news.share", "ok");
-            redisClient.publish("news.share", "hello word");
+            System.out.println("发布："+channel);
+            redisClient.publish(channel, "ok");
+            redisClient.publish(channel, mesage);
         }).start();
     }
 }
 
 
 class Subscriber{
-    public void psub(final Jedis redisClient, final MyListener listener) {
+    public void psub(final Jedis redisClient, final MyListener listener,final String channel) {
 
         new Thread(() -> {
-            System.out.println("订阅：news.share");
+            System.out.println("订阅："+channel);
             // 订阅得到信息在lister的onMessage(...)方法中进行处理
             // 订阅多个频道
             // redisClient.subscribe(listener, "news.share", "news.log");
             //redisClient.subscribe(listener, new String[]{"news.share","news.log"});
-            redisClient.psubscribe(listener, "news.share");// 使用模式匹配的方式设置频道
+            redisClient.psubscribe(listener, channel);// 使用模式匹配的方式设置频道
         }).start();
     }
 }

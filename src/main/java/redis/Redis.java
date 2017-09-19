@@ -1,3 +1,5 @@
+package redis;
+
 import redis.clients.jedis.Jedis;
 
 import java.util.List;

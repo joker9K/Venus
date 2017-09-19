@@ -1,5 +1,7 @@
+package redis;
+
+import redis.RedisPool;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Response;
 import redis.clients.jedis.Transaction;
 
 /**
