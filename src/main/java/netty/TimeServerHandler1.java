@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 
@@ -12,21 +11,19 @@ import java.util.Date;
  * Created by zhangwt n 2017/11/10.
  * 用于对网络事件进行读写操作
  */
-@Slf4j
-public class TimeServerHandler extends ChannelInboundHandlerAdapter{
+public class TimeServerHandler1 extends ChannelInboundHandlerAdapter{
+    private int counter;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //ByteBuf类似于JDK中的java.nio.ByteBuffer对象,不过它提供了更加强大和灵活的功能
-        ByteBuf buf=(ByteBuf) msg;
-        byte[] req = new byte[buf.readableBytes()];
-        buf.readBytes(req);
-        String body = new String(req,"UTF-8");
-        System.out.println("The time server receive order:"+body);
-        String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(body) ? new
+        String body=(String) msg;
+        System.out.println("The time server receive order : "+body+" ;the counter is : "+ ++counter);
+        String currentTime="QUERY TIME ORDER".equalsIgnoreCase(body) ? new
                 Date(System.currentTimeMillis()).toString() : "BAD ORDER";
-        ByteBuf resp = Unpooled.copiedBuffer(currentTime.getBytes());
-        ctx.write(resp);
+        currentTime    =currentTime+System.getProperty("line.separator");
+        ByteBuf resp=Unpooled.copiedBuffer(currentTime.getBytes());
+        ctx.writeAndFlush(resp);
     }
 
     @Override
@@ -41,8 +38,6 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter{
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        //释放资源
-        log.warn("Unexpected exception from downstream : "+cause.getMessage());
         ctx.close();
     }
 }

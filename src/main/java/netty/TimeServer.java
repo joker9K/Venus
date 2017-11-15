@@ -8,6 +8,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 
 /**
  * Created by zhangwt n 2017/11/10.
@@ -65,7 +67,14 @@ public class TimeServer {
 
         @Override
         protected void initChannel(SocketChannel arg0) throws Exception {
-            arg0.pipeline().addLast(new TimeServerHandler());
+            //arg0.pipeline().addLast(new TimeServerHandler());//正常模拟netty通信
+
+            //处理TCP粘包的现象
+            arg0.pipeline().addLast(new LineBasedFrameDecoder(1024));//LineBasedFrameDecoder是以换行符为界限的解码器,1024为最大长度。如果连续读取到最大长度后没有发现换行符，就会抛出异常，同时忽略掉之前读到的异常码流。
+            arg0.pipeline().addLast(new StringDecoder());//解码
+
+            arg0.pipeline().addLast(new TimeServerHandler1());
         }
     }
+
 }

@@ -8,8 +8,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-
-import java.util.concurrent.CountDownLatch;
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 
 /**
  * Created by zhangwt n 2017/11/10.
@@ -24,25 +24,7 @@ public class TimeClient {
                 //采用默认值
             }
         }
-        int requestThread = 100;
-        CountDownLatch latch = new CountDownLatch(requestThread);
-        final int finalPort = port;
-        long startTime=System.currentTimeMillis();
-        for (int i=0;i<requestThread;i++) {
-            new Thread(() -> {
-                try {
-                    new TimeClient().connect(finalPort, "127.0.0.1");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    latch.countDown();
-                }
-            }).start();
-        }
-        latch.await();
-        long endTime=System.currentTimeMillis();
-        float excTime=(float)(endTime-startTime)/1000;
-        System.out.println(requestThread+"个请求总耗时："+excTime+"s");
+        new TimeClient().connect(port, "127.0.0.1");
     }
 
 
@@ -59,7 +41,12 @@ public class TimeClient {
 
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new TimeClientHandler());
+//                            ch.pipeline().addLast(new TimeClientHandler());//正常发送数据
+
+                            //直接在TimeClientHandler之前新增LineBasedFrameDecoder和StringDecoder解码器
+                            ch.pipeline().addLast(new LineBasedFrameDecoder(1024));
+                            ch.pipeline().addLast(new StringDecoder());
+                            ch.pipeline().addLast(new TimeClientHandler2());//模拟TCP粘包
                         }
                     });
 

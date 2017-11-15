@@ -10,14 +10,14 @@ import java.lang.reflect.Method;
  * Created by zhangwt n 2017/11/13.
  * 利用CGlib的动态代理
  */
-public class CGLibProxy implements MethodInterceptor{
+public class CGLibDynamicProxy implements MethodInterceptor{
 
-    private static CGLibProxy instance = new CGLibProxy();
+    private static CGLibDynamicProxy instance = new CGLibDynamicProxy();
 
-    private CGLibProxy() {
+    private CGLibDynamicProxy() {
     }
 
-    public static CGLibProxy getInstance(){
+    public static CGLibDynamicProxy getInstance(){
         return instance;
     }
 
@@ -44,7 +44,7 @@ public class CGLibProxy implements MethodInterceptor{
     }
 
     public static void main(String[] args) {
-        Hello hello = CGLibProxy.getInstance().getProxy(HelloImpl.class);
+        Hello hello = CGLibDynamicProxy.getInstance().getProxy(HelloImpl.class);
         hello.say("Jack");
     }
 }

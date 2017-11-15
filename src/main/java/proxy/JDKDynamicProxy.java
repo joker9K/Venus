@@ -9,11 +9,11 @@ import java.lang.reflect.Proxy;
  * Created by zhangwt n 2017/11/13.
  * jdk自带的动态代理
  */
-public class DynamicProxy implements InvocationHandler{
+public class JDKDynamicProxy implements InvocationHandler{
 
     private Object target;
 
-    public DynamicProxy(Object target) {
+    public JDKDynamicProxy(Object target) {
         this.target = target;
     }
 
@@ -42,7 +42,7 @@ public class DynamicProxy implements InvocationHandler{
 
 
     public static void main(String[] args) {
-        DynamicProxy proxy = new DynamicProxy(new HelloImpl());
+        JDKDynamicProxy proxy = new JDKDynamicProxy(new HelloImpl());
         Hello hello = proxy.getProxy();
         hello.say("Jack");
     }
