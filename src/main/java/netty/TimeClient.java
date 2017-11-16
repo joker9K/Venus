@@ -43,7 +43,7 @@ public class TimeClient {
                         protected void initChannel(SocketChannel ch) throws Exception {
 //                            ch.pipeline().addLast(new TimeClientHandler());//正常发送数据
 
-                            //直接在TimeClientHandler之前新增LineBasedFrameDecoder和StringDecoder解码器
+                            //直接在TimeClientHandler2之前新增LineBasedFrameDecoder和StringDecoder解码器
                             ch.pipeline().addLast(new LineBasedFrameDecoder(1024));
                             ch.pipeline().addLast(new StringDecoder());
                             ch.pipeline().addLast(new TimeClientHandler2());//模拟TCP粘包
