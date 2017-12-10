@@ -105,6 +105,14 @@
             <version>1.2.31</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-core -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -125,6 +133,7 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
+
     </dependencies>
 
 </project>

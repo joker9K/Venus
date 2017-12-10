@@ -1,0 +1,24 @@
+netty中的各个类：
+Channel ---- Scoket
+EventLoop ---- 控制流、多线程处理、并发
+ChannelFuture ---- 异步通知
+
+ChannelInboundHandler——处理输入数据和所有类型的状态变化  字节转化为消息 decode
+ChannelOutboundHandler——处理输出数据，可以拦截所有操作  消息转化为字节 encode
+
+
+按需分配：ByetBufAllocator
+PooledByteBufAllocator--池化了ByteBuf的实例以提高性能并最大限度地减少内存碎片
+UnpooledByteBufAllocator--不池化ByteBuf实例，并且在每次它被调用时都会返回一个新的实例
+Netty默认使用PooledByteBufAllocator
+netty提供Unpooled工具类来创建未池化的ByteBuf实例
+
+
+ByteBufHolder是ByteBuf的一个容器，它可以更方便地访问ByteBuf中的数据，在使用不同的协议进行数据传输的时候，
+不同的协议消息体包含的数据格式和字段不一样，所以抽象一个ByteBufHolder对ByteBuf进行包装，不同的子类有不同的实现，
+使用者可以根据自己的需要进行实现。Netty提供了一个默认实现DefaultByteBufHolder。
+
+CompositeByteBuf是一个虚拟的Buffer，它可以将多个ByteBuf组装为一个ByteBuf视图。在Netty中，CompositeByByteBuf中维
+护了一个Component类型的集合。Component是ByteBuf的包装类，它聚合了ByteBuf维护在集合中的位置偏移量等信息。一般情况下，
+我们应该使用ByteBufAllocator.compositeBuffer()和Unpooled.wrappedBuffer(ByteBuf...)方法来创建CompositeByteBuf，
+而不是直接通过构造函数去实例化一个CompositeByteBuf对象。

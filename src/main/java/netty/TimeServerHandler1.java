@@ -40,4 +40,6 @@ public class TimeServerHandler1 extends ChannelInboundHandlerAdapter{
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         ctx.close();
     }
+
+
 }

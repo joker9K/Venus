@@ -15,6 +15,8 @@ import java.util.Date;
 @Slf4j
 public class TimeServerHandler extends ChannelInboundHandlerAdapter{
 
+
+    //当从服务器接收到一条消息时被调用
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //ByteBuf类似于JDK中的java.nio.ByteBuffer对象,不过它提供了更加强大和灵活的功能
@@ -44,5 +46,11 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter{
         //释放资源
         log.warn("Unexpected exception from downstream : "+cause.getMessage());
         ctx.close();
+    }
+
+    //连接建立时被调用
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
     }
 }
