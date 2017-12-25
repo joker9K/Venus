@@ -1,10 +1,7 @@
 package netty;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -34,9 +31,13 @@ public class TimeClient {
 
         try {
             Bootstrap b=new Bootstrap();
+            //设置用于处理Channel所有事件的EventLoopGroup
             b.group(group)
+                    //channel()方法指定了Channel的实现类。
                     .channel(NioSocketChannel.class)
+                    //设置ChannelOption，其将被应用到每个新创建的Channel的ChannelConfig。
                     .option(ChannelOption.TCP_NODELAY, true)
+                    //设置将被添加到ChannelPipeline以接收事件通知的ChannelHandler
                     .handler(new ChannelInitializer<SocketChannel>() {
 
                         @Override

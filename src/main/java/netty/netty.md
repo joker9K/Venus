@@ -1,3 +1,17 @@
+Netty提供的传输：
+NIO：使用java.nio.channel包作为基础——基于选择器的方式
+Epoll：由JNI的epoll()和非阻塞IO。这个传输支持只有在Linux上可用的多种特性，如SO_REUSEPORT,比NIO传输更快，而且完全非阻塞的
+OIO：使用java.net包作为基础——使用阻塞流
+Local：可以在VM内部通过管道进行通信的本地传输
+Embedded：Embedded传输，允许使用ChannelHandler而又不需要一个真正的基于网络的传输。这在测试你的ChannelHandler实现时非常有用
+
+
+Channel：表示一个与socket关联的通道
+ChannelPipeline： 管道，一个Channel拥有一个ChannelPipeline，ChannelPipeline维护着一个处理链（严格的说是两 个：upstream、downstream），处理链是由很多处理句柄ChannelHandler所构成，每个ChannelHandler处理完以 后会传递给链中的下一个处理句柄继续处理。
+ChannelHandler：处理句柄，用户可以定义自己的处理句柄来处理每个请求，或发出请求前进行预处理，典型的有编码/解码器：decoder、encoder。
+ChannelEvent：事件，是整个模型的处理对象，当产生或触发（fire）一个事件时，该事件会沿着ChannelPipeline处理链依次被处理。
+ChannelFuture： 异步结果，这个是异步事件处理的关键，当一个事件被处理时，可以直接以ChannelFuture的形式直接返回，不用在当前操作中被阻塞。可以通过 ChannelFuture得到最终的执行结果，具体的做法是在ChannelFuture添加监听器listener，当操作最终被执行完 后，listener会被触发，我们可以在listener的回调函数中预定义我们的业务代码。
+
 netty中的各个类：
 Channel ---- Scoket
 EventLoop ---- 控制流、多线程处理、并发
@@ -22,3 +36,6 @@ CompositeByteBuf是一个虚拟的Buffer，它可以将多个ByteBuf组装为一
 护了一个Component类型的集合。Component是ByteBuf的包装类，它聚合了ByteBuf维护在集合中的位置偏移量等信息。一般情况下，
 我们应该使用ByteBufAllocator.compositeBuffer()和Unpooled.wrappedBuffer(ByteBuf...)方法来创建CompositeByteBuf，
 而不是直接通过构造函数去实例化一个CompositeByteBuf对象。
+
+
+Netty的流式语法：AbstractBootstrap-->学习
