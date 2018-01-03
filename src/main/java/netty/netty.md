@@ -39,3 +39,6 @@ CompositeByteBuf是一个虚拟的Buffer，它可以将多个ByteBuf组装为一
 
 
 Netty的流式语法：AbstractBootstrap-->学习
+
+
+ChannelOutboundHandler，逆序执行;ChannelIntboundHandler，顺序执行

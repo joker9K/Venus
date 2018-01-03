@@ -4,8 +4,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.openqa.selenium.WebDriver;
-import redis.RedisPool;
-import redis.clients.jedis.Jedis;
 
 import java.text.MessageFormat;
 
